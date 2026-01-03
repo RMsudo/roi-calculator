@@ -1,4 +1,3 @@
-// ---------- helpers ----------
 const fmtEUR = (n) => {
   if (!isFinite(n)) return "–";
   return new Intl.NumberFormat("de-DE", {
@@ -39,26 +38,25 @@ function calcScenario({ visitors, crNow, close, aov, margin, cost }, crNew) {
 
   return {
     crNew, leadsNew, customersNew, revenueNew, profitNew,
+    profitOld, // fürs Debug/Verständnis ok
     deltaProfitMonth, deltaProfitYear, roi, payback
   };
 }
 
 function buildScenarios(inputs, crReal) {
   const crAlt = inputs.crNow;
-
   const worst = Math.max(crAlt * 1.5, crAlt + 0.1);
   const best = Math.max(3.0, crAlt * 3);
 
   return {
     status: calcScenario(inputs, crAlt),
     worst: calcScenario(inputs, clamp(worst, 0, 100)),
-    real: calcScenario(inputs, clamp(crReal, 0, 100)),
-    best: calcScenario(inputs, clamp(best, 0, 100)),
+    real:  calcScenario(inputs, clamp(crReal, 0, 100)),
+    best:  calcScenario(inputs, clamp(best, 0, 100)),
   };
 }
 
-// ---------- UI state ----------
-let mode = "cr"; // "cr" or "leads"
+let mode = "cr";
 
 const els = {
   cost: document.getElementById("cost"),
@@ -81,7 +79,9 @@ const els = {
   kpiPayback: document.getElementById("kpiPayback"),
   kpiYear: document.getElementById("kpiYear"),
   tblBody: document.getElementById("tblBody"),
+
   btnCopy: document.getElementById("btnCopy"),
+  btnPrint: document.getElementById("btnPrint"),
   validationNote: document.getElementById("validationNote"),
 };
 
@@ -135,29 +135,27 @@ function render() {
   const crReal = Number(els.crTarget.value || 2.0);
   const S = buildScenarios(inputs, crReal);
 
-  // KPIs based on realistic scenario
   const r = S.real;
+
   const roiText = isFinite(r.roi) ? (fmtNum(r.roi, 0) + "%") : "–";
-  const paybackText = (r.payback === Infinity) ? "nicht" : fmtNum(r.payback, 1);
+  const paybackText = (r.payback === Infinity) ? "nicht amortisierbar" : (fmtNum(r.payback, 1) + " Monate");
   const yearText = fmtEUR(r.deltaProfitYear);
 
   els.kpiROI.textContent = roiText;
   els.kpiPayback.textContent = paybackText;
   els.kpiYear.textContent = yearText;
 
-  // Summary text
   const summary =
     `Bei ${fmtNum(inputs.visitors, 0)} Besuchern/Monat und aktuell ${fmtNum(inputs.crNow, 2)}% Conversion Rate ` +
     `ergibt sich im realistischen Szenario (${fmtNum(r.crNew, 2)}%) ein zusätzlicher Gewinn von ` +
     `${fmtEUR(r.deltaProfitMonth)}/Monat. ` +
-    `Die Investition von ${fmtEUR(inputs.cost)} amortisiert sich ` +
-    (r.payback === Infinity ? `nicht (Zusatzgewinn ≤ 0). ` : `nach ca. ${fmtNum(r.payback, 1)} Monaten. `) +
+    `Investition: ${fmtEUR(inputs.cost)}. ` +
+    (r.payback === Infinity ? `Amortisation: nicht (Zusatzgewinn ≤ 0). ` : `Amortisation: ca. ${fmtNum(r.payback, 1)} Monate. `) +
     `ROI im ersten Jahr: ${roiText}.`;
 
   els.summaryText.textContent = summary;
   els.btnCopy.dataset.summary = summary;
 
-  // Table
   const rows = [
     ["Conversion Rate", `${fmtNum(S.status.crNew, 2)}%`, `${fmtNum(S.worst.crNew, 2)}%`, `${fmtNum(S.real.crNew, 2)}%`, `${fmtNum(S.best.crNew, 2)}%`],
     ["Anfragen / Monat", fmtNum(S.status.leadsNew, 0), fmtNum(S.worst.leadsNew, 0), fmtNum(S.real.leadsNew, 0), fmtNum(S.best.leadsNew, 0)],
@@ -210,24 +208,25 @@ function setMode(next) {
 els.modeCR.addEventListener("click", () => setMode("cr"));
 els.modeLeads.addEventListener("click", () => setMode("leads"));
 
-// Re-render on input changes
 ["input", "change"].forEach(evt => {
   [els.cost, els.visitors, els.leads, els.crNow, els.crTarget, els.close, els.margin, els.aov].forEach(el => {
     el.addEventListener(evt, render);
   });
 });
 
-// Copy summary
 els.btnCopy.addEventListener("click", async () => {
   const text = els.btnCopy.dataset.summary || "";
   try {
     await navigator.clipboard.writeText(text);
     els.btnCopy.textContent = "Kopiert ✅";
     setTimeout(() => els.btnCopy.textContent = "Zusammenfassung kopieren", 1200);
-  } catch (e) {
+  } catch {
     alert("Kopieren hat nicht geklappt. Markiere den Text manuell.");
   }
 });
 
-// first render
+els.btnPrint.addEventListener("click", () => {
+  window.print();
+});
+
 render();

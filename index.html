@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Website ROI Rechner</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div>
+        <h1>Website ROI Calculator</h1>
+        <div class="sub">
+          Berechne ROI, Amortisation und Zusatzgewinn eines Website-Redesigns auf Basis von Conversion-Verbesserung.
+          Alles läuft lokal im Browser.
+        </div>
+      </div>
+      <button class="btn" id="btnCopy">Zusammenfassung kopieren</button>
+    </header>
+
+    <div class="grid">
+      <!-- LEFT: INPUTS -->
+      <section class="card">
+        <div class="hd">
+          <h2>1. Eingaben</h2>
+          <span class="pill">MVP • kostenlos</span>
+        </div>
+
+        <div class="bd">
+          <div class="row">
+            <label>Basis berechnen über</label>
+            <div class="toggle">
+              <button class="tbtn active" id="modeCR" type="button">Conversion Rate</button>
+              <button class="tbtn" id="modeLeads" type="button">Anfragen absolut</button>
+              <span class="small">(optional)</span>
+            </div>
+            <div class="hint">
+              Wenn du „Anfragen absolut“ nutzt, wird die aktuelle Conversion Rate automatisch aus Besucher/Monat und
+              Anfragen/Monat berechnet.
+            </div>
+          </div>
+
+          <div class="row">
+            <label>Investment (Redesign-Kosten)</label>
+            <div class="inp"><span>€</span><input id="cost" type="number" min="0" step="100" value="20000"></div>
+          </div>
+
+          <div class="row">
+            <label>Besucher / Monat</label>
+            <div class="inp"><span>👥</span><input id="visitors" type="number" min="0" step="100" value="3000"></div>
+          </div>
+
+          <div class="row" id="leadsRow" style="display:none">
+            <label>Anfragen / Monat</label>
+            <div class="inp"><span>✉️</span><input id="leads" type="number" min="0" step="1" value="24"></div>
+            <div class="hint">Errechnete aktuelle CR: <b id="crFromLeads">0,80%</b></div>
+          </div>
+
+          <div class="row" id="crRow">
+            <label>Aktuelle Conversion Rate (%)</label>
+            <div class="inp"><span>%</span><input id="crNow" type="number" min="0" max="100" step="0.1" value="0.8"></div>
+            <div class="hint">Typisch B2B grob: 0,8%–2,5% (stark branchenabhängig)</div>
+          </div>
+
+          <div class="row">
+            <label>Ziel: Realistisches Szenario (Conversion Rate neu)</label>
+            <div class="inp">
+              <span>%</span>
+              <select id="crTarget">
+                <option value="1.5">1,5%</option>
+                <option value="2.0" selected>2,0% (Standard)</option>
+                <option value="2.4">2,4%</option>
+                <option value="3.0">3,0%</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="two">
+            <div class="row">
+              <label>Abschlussquote (%)</label>
+              <div class="inp"><span>%</span><input id="close" type="number" min="0" max="100" step="1" value="30"></div>
+              <div class="hint">B2B oft 10–40%</div>
+            </div>
+
+            <div class="row">
+              <label>Gewinnmarge (%)</label>
+              <div class="inp"><span>%</span><input id="margin" type="number" min="0" max="100" step="1" value="25"></div>
+              <div class="hint">„Profit“, nicht Umsatz</div>
+            </div>
+          </div>
+
+          <div class="row">
+            <label>Ø Auftragswert (€)</label>
+            <div class="inp"><span>€</span><input id="aov" type="number" min="0" step="100" value="5000"></div>
+          </div>
+
+          <div class="warnbox" id="validationNote" style="display:none"></div>
+        </div>
+      </section>
+
+      <!-- RIGHT: OUTPUTS -->
+      <section>
+        <div class="summary" id="summaryBox">
+          <div class="k">MANAGEMENT SUMMARY</div>
+          <p id="summaryText"></p>
+          <div class="small" style="margin-top:8px">
+            Hinweis: Szenario-Rechnung. Keine Garantie, aber nachvollziehbare Mathematik.
+          </div>
+        </div>
+
+        <div class="kpi">
+          <div class="box">
+            <div class="ttl">ROI (Jahr 1)</div>
+            <div class="val" id="kpiROI">–</div>
+            <div class="subv">Return on Investment</div>
+          </div>
+          <div class="box">
+            <div class="ttl">AMORTISATION</div>
+            <div class="val" id="kpiPayback">–</div>
+            <div class="subv">Monate bis Break-Even</div>
+          </div>
+          <div class="box">
+            <div class="ttl">ZUSATZGEWINN / JAHR</div>
+            <div class="val" id="kpiYear">–</div>
+            <div class="subv">Reiner Profit-Zuwachs</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="hd">
+            <h2>Szenario Vergleich</h2>
+            <span class="pill">Status quo • Worst • Realistisch • Best</span>
+          </div>
+          <div class="bd">
+            <table>
+              <thead>
+                <tr>
+                  <th>Metrik</th>
+                  <th>Status quo</th>
+                  <th><span class="badge b-worst">Worst</span></th>
+                  <th><span class="badge b-real">Realistisch</span></th>
+                  <th><span class="badge b-best">Best</span></th>
+                </tr>
+              </thead>
+              <tbody id="tblBody"></tbody>
+            </table>
+
+            <details>
+              <summary>Berechnungslogik & Formeln anzeigen</summary>
+              <div class="formula mono">
+                <div><b>Anfragen (Leads)</b>: Besucher × (ConversionRate / 100)</div>
+                <div><b>Kunden</b>: Leads × (Abschlussquote / 100)</div>
+                <div><b>Umsatz</b>: Kunden × Ø Auftragswert</div>
+                <div><b>Gewinn (Profit)</b>: Umsatz × (Marge / 100)</div>
+                <div><b>Zusatzgewinn</b>: Gewinn_neu − Gewinn_alt</div>
+                <div><b>ROI (Jahr 1)</b>: ((Zusatzgewinn_Jahr − Kosten) / Kosten) × 100</div>
+                <div><b>Amortisation</b>: Kosten / Zusatzgewinn_Monat</div>
+                <hr class="hr">
+                <div class="small">
+                  <b>Szenarien-Definition:</b><br>
+                  • Worst: max(CR_alt × 1,5; CR_alt + 0,1 Prozentpunkte)<br>
+                  • Realistisch: Auswahl im Dropdown (z. B. 2,0%)<br>
+                  • Best: max(3,0%; CR_alt × 3) (gedeckelt auf 100%)
+                </div>
+              </div>
+            </details>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

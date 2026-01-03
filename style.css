@@ -14,19 +14,19 @@
 *{box-sizing:border-box}
 body{
   margin:0;
-  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+  font-family: "Montserrat", ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
   background: var(--bg);
   color: var(--text);
 }
 
+
 /* HERO (ähnlich deinem hellen Screenshot) */
 .hero{
-  background:
-    radial-gradient(900px 420px at 15% 15%, rgba(244,100,51,.35), transparent 60%),
-    radial-gradient(900px 420px at 75% 0%, rgba(255,255,255,.12), transparent 55%),
-    var(--dark);
+  background: #F3F4F6;   /* hell und clean */
   padding: 26px 16px;
+  border-bottom: 1px solid rgba(17,24,39,.08);
 }
+
 .hero-inner{
   max-width:1180px;
   margin:0 auto;
@@ -46,12 +46,12 @@ body{
 .brand-text h1{
   margin:0;
   font-size:30px;
-  color:#fff;
+  color: var(--dark);
   letter-spacing:.2px;
 }
 .brand-text p{
   margin:6px 0 0;
-  color: rgba(255,255,255,.75);
+  color: rgba(42,42,42,.70);
   line-height:1.25;
 }
 
@@ -72,10 +72,11 @@ body{
 }
 .btn-primary:hover{filter:brightness(0.95)}
 .btn-ghost{
-  background: rgba(255,255,255,.10);
-  color:#fff;
+  background: rgba(42,42,42,.06);
+  color: var(--dark);
+  border-color: rgba(42,42,42,.12);
 }
-.btn-ghost:hover{background: rgba(255,255,255,.15)}
+.btn-ghost:hover{ background: rgba(42,42,42,.10); }
 
 /* Layout */
 .wrap{max-width:1180px;margin:0 auto;padding:18px 16px 44px;}

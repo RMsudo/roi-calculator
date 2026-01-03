@@ -22,9 +22,9 @@ body{
 
 /* HERO (ähnlich deinem hellen Screenshot) */
 .hero{
-  background: #F3F4F6;   /* hell und clean */
+  background: var(--dark);           /* #2A2A2A */
   padding: 26px 16px;
-  border-bottom: 1px solid rgba(17,24,39,.08);
+  border-bottom: 1px solid rgba(255,255,255,.10);
 }
 
 .hero-inner{
@@ -155,9 +155,9 @@ input, select{
 
 /* Summary */
 .summary{
-  background: linear-gradient(90deg, rgba(244,100,51,.95), rgba(42,42,42,.85));
+  background: var(--dark);           /* #2A2A2A */
   color:#fff;
-  border:1px solid rgba(255,255,255,.15);
+  border:1px solid rgba(255,255,255,.10);
   border-radius: var(--radius);
   padding:14px 16px;
   box-shadow: var(--shadow);
@@ -176,13 +176,18 @@ input, select{
 
 .kpi-box{
   background:#fff;
-  border:1px solid var(--line);
+  border:1px solid rgba(17,24,39,.10);
   border-radius:16px;
-  padding:14px;
-  box-shadow: var(--shadow);
+  padding:18px;
+  box-shadow: 0 10px 22px rgba(17,24,39,.08);
 }
 .kpi-box .ttl{font-size:12px;color:var(--muted);font-weight:1000;letter-spacing:.4px}
-.kpi-box .val{font-size:34px;font-weight:1100;margin-top:6px;color:var(--dark)}
+.kpi-box .val{
+  font-size:30px;
+  font-weight:900;
+  margin-top:8px;
+  color:var(--dark);
+}
 .kpi-box .subv{font-size:12px;color:var(--muted);margin-top:4px}
 
 /* Table */
@@ -236,3 +241,9 @@ summary{
 .dot{display:inline-block;width:10px;height:10px;border-radius:999px;vertical-align:middle;margin:0 6px 0 8px}
 .dot-orange{background:var(--orange)}
 .dot-dark{background:var(--dark)}
+
+/* KPI Farben wie im "schönen" Beispiel */
+.val-good{ color:#16a34a !important; }   /* grün */
+.val-warn{ color:#f59e0b !important; }   /* orange */
+.val-bad{  color:#dc2626 !important; }   /* rot */
+.val-neutral{ color: var(--dark) !important; }

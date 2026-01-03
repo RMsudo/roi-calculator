@@ -175,3 +175,5 @@ summary{
   color:#ffe3b5;
   font-size:12px;line-height:1.35;
 }
+
+.metric{color:var(--text);font-weight:800}

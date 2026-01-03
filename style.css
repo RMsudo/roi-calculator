@@ -126,4 +126,52 @@ input, select{
 .kpi .val{font-size:32px;font-weight:900;margin-top:6px}
 .kpi .subv{font-size:12px;color:var(--muted);margin-top:4px}
 
-table{width:100%;
+table{width:100%;border-collapse:collapse;overflow:hidden;border-radius:14px}
+th, td{
+  padding:12px 12px;border-bottom:1px solid rgba(255,255,255,.08);
+  text-align:left;font-size:13px;
+}
+th{color:var(--muted);font-weight:900;text-transform:uppercase;font-size:11px;letter-spacing:.5px}
+tr:last-child td{border-bottom:none}
+
+.badge{
+  font-size:11px;font-weight:900;padding:6px 10px;border-radius:999px;
+  border:1px solid rgba(255,255,255,.14);display:inline-block
+}
+.b-worst{background:rgba(245,158,11,.16); color:#ffd89a; border-color:rgba(245,158,11,.22)}
+.b-real{background:rgba(59,130,246,.18); color:#cfe2ff; border-color:rgba(59,130,246,.25)}
+.b-best{background:rgba(34,197,94,.16); color:#bff7d5; border-color:rgba(34,197,94,.22)}
+
+details{
+  margin-top:14px;
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:14px;
+  background:rgba(15,23,42,.35);
+  overflow:hidden;
+}
+summary{
+  cursor:pointer;
+  padding:12px 14px;
+  color:var(--text);
+  font-weight:900;
+  border-bottom:1px solid rgba(255,255,255,.10);
+}
+
+.mono{font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; color:var(--muted)}
+.formula{padding:12px 14px;line-height:1.6;font-size:13px}
+
+.small{font-size:12px;color:var(--muted)}
+
+.hr{
+  border:none;
+  border-top:1px solid rgba(255,255,255,.08);
+  margin:12px 0;
+}
+
+.warnbox{
+  margin-top:10px;padding:10px 12px;border-radius:12px;
+  border:1px solid rgba(245,158,11,.22);
+  background:rgba(245,158,11,.10);
+  color:#ffe3b5;
+  font-size:12px;line-height:1.35;
+}

@@ -3,31 +3,42 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Website ROI Rechner</title>
+  <title>CSIGNITY • Website ROI Calculator</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="wrap">
-    <header>
-      <div>
-        <h1>Website ROI Calculator</h1>
-        <div class="sub">
-          Berechne ROI, Amortisation und Zusatzgewinn eines Website-Redesigns auf Basis von Conversion-Verbesserung.
-          Alles läuft lokal im Browser.
+  <!-- Top Bar / Hero -->
+  <header class="hero">
+    <div class="hero-inner">
+      <div class="brand">
+        <img
+          class="logo"
+          src="https://www.csignity.com/wp-content/uploads/2023/07/CSIGNITY-Logo-SVG.svg"
+          alt="CSIGNITY Logo"
+        />
+        <div class="brand-text">
+          <h1>Website ROI Calculator</h1>
+          <p>Berechnen Sie den Return on Investment Ihres Website-Redesigns.</p>
         </div>
       </div>
-      <button class="btn" id="btnCopy">Zusammenfassung kopieren</button>
-    </header>
 
+      <div class="hero-actions">
+        <button class="btn btn-ghost" id="btnCopy" type="button">Zusammenfassung kopieren</button>
+        <button class="btn btn-primary" id="btnPrint" type="button">Report exportieren (PDF)</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
     <div class="grid">
       <!-- LEFT: INPUTS -->
       <section class="card">
-        <div class="hd">
+        <div class="card-hd">
           <h2>1. Eingaben</h2>
           <span class="pill">MVP • kostenlos</span>
         </div>
 
-        <div class="bd">
+        <div class="card-bd">
           <div class="row">
             <label>Basis berechnen über</label>
             <div class="toggle">
@@ -54,7 +65,7 @@
           <div class="row" id="leadsRow" style="display:none">
             <label>Anfragen / Monat</label>
             <div class="inp"><span>✉️</span><input id="leads" type="number" min="0" step="1" value="24"></div>
-            <div class="hint">Errechnete aktuelle CR: <b id="crFromLeads">0,80%</b></div>
+            <div class="hint">Errechnete aktuelle CR: <b id="crFromLeads">–</b></div>
           </div>
 
           <div class="row" id="crRow">
@@ -100,27 +111,27 @@
       </section>
 
       <!-- RIGHT: OUTPUTS -->
-      <section>
-        <div class="summary" id="summaryBox">
+      <section class="stack">
+        <div class="summary">
           <div class="k">MANAGEMENT SUMMARY</div>
-          <p id="summaryText"></p>
+          <p id="summaryText">Berechne…</p>
           <div class="small" style="margin-top:8px">
             Hinweis: Szenario-Rechnung. Keine Garantie, aber nachvollziehbare Mathematik.
           </div>
         </div>
 
         <div class="kpi">
-          <div class="box">
+          <div class="kpi-box">
             <div class="ttl">ROI (Jahr 1)</div>
             <div class="val" id="kpiROI">–</div>
             <div class="subv">Return on Investment</div>
           </div>
-          <div class="box">
+          <div class="kpi-box">
             <div class="ttl">AMORTISATION</div>
             <div class="val" id="kpiPayback">–</div>
             <div class="subv">Monate bis Break-Even</div>
           </div>
-          <div class="box">
+          <div class="kpi-box">
             <div class="ttl">ZUSATZGEWINN / JAHR</div>
             <div class="val" id="kpiYear">–</div>
             <div class="subv">Reiner Profit-Zuwachs</div>
@@ -128,11 +139,11 @@
         </div>
 
         <div class="card">
-          <div class="hd">
+          <div class="card-hd">
             <h2>Szenario Vergleich</h2>
             <span class="pill">Status quo • Worst • Realistisch • Best</span>
           </div>
-          <div class="bd">
+          <div class="card-bd">
             <table>
               <thead>
                 <tr>
@@ -148,7 +159,7 @@
 
             <details>
               <summary>Berechnungslogik & Formeln anzeigen</summary>
-              <div class="formula mono">
+              <div class="formula">
                 <div><b>Anfragen (Leads)</b>: Besucher × (ConversionRate / 100)</div>
                 <div><b>Kunden</b>: Leads × (Abschlussquote / 100)</div>
                 <div><b>Umsatz</b>: Kunden × Ø Auftragswert</div>
@@ -167,9 +178,13 @@
             </details>
           </div>
         </div>
+
+        <div class="footer-note">
+          Powered by <b>CSIGNITY</b> • Farben: <span class="dot dot-orange"></span> #F46433 • <span class="dot dot-dark"></span> #2A2A2A
+        </div>
       </section>
     </div>
-  </div>
+  </main>
 
   <script src="app.js"></script>
 </body>
